@@ -49,17 +49,38 @@ function getEnvSubscriptions(): SourceSubscription[] {
     return [];
   }
 
-  try {
-    const raw = JSON.parse(process.env.NEXT_PUBLIC_SUBSCRIPTION_SOURCES);
-    if (!Array.isArray(raw)) return [];
+  const envValue = process.env.NEXT_PUBLIC_SUBSCRIPTION_SOURCES.trim();
+  if (!envValue) return [];
 
-    return raw
-      .filter((item: any) => item && typeof item.name === 'string' && typeof item.url === 'string')
-      .map((item: any) => createSubscription(item.name, item.url));
+  // 1. Try JSON
+  try {
+    const raw = JSON.parse(envValue);
+    if (Array.isArray(raw)) {
+      return raw
+        .filter((item: any) => item && typeof item.name === 'string' && typeof item.url === 'string')
+        .map((item: any) => createSubscription(item.name, item.url));
+    }
   } catch (e) {
-    console.error('Failed to parse NEXT_PUBLIC_SUBSCRIPTION_SOURCES', e);
-    return [];
+    // Ignore JSON parse error, try direct URL
   }
+
+  // 2. Try Simple URL (or comma separated)
+  // Check if it looks like a URL (basic check)
+  if (envValue.includes('http')) {
+    const urls = envValue.split(',').map(u => u.trim()).filter(u => u.length > 0);
+    return urls.map((url, index) => {
+      // Basic URL validation
+      if (!url.startsWith('http')) return null;
+
+      const name = urls.length > 1
+        ? `系统预设源 ${index + 1}`
+        : `系统预设源`;
+
+      return createSubscription(name, url);
+    }).filter((s): s is SourceSubscription => s !== null);
+  }
+
+  return [];
 }
 // Debugging helper
 // console.log("Environment Subscriptions:", getEnvSubscriptions());
@@ -207,7 +228,7 @@ export const settingsStore = {
   },
 
   importSettings(jsonString: string): boolean {
-    return importSettings(jsonString, (s) => this.saveSettings(s));
+    return importSettings(jsonString, (s) => this.saveSettings(s), this.getSettings());
   },
 
   resetToDefaults(): void {
