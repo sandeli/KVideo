@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { DesktopVideoPlayer } from './DesktopVideoPlayer';
-import { MobileVideoPlayer } from './MobileVideoPlayer';
+import { useScreenOrientation } from '@/lib/hooks/mobile/useScreenOrientation';
 
 interface CustomVideoPlayerProps {
   src: string;
@@ -25,39 +25,39 @@ interface CustomVideoPlayerProps {
 }
 
 /**
- * Smart Video Player that renders different versions based on device
- * - Mobile/Tablet: Optimized touch controls, double-tap gestures, CSS fake-landscape rotation
- * - Desktop: Full-featured player with hover interactions
+ * Smart Video Player Component
+ * 统一渲染视频播放器，并自动监听全屏状态，在移动端（iOS/微信等）自动应用 CSS 伪横屏 90 度旋转兼容
  */
 export function CustomVideoPlayer(props: CustomVideoPlayerProps) {
-  const [isMobileDevice, setIsMobileDevice] = useState<boolean | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
+  // 监听浏览器原生全屏状态变化
   useEffect(() => {
-    // 动态检测是否为移动设备 (iOS / Android / 微信等)
-    const checkMobile = () => {
-      const userAgent = typeof window !== 'undefined' ? navigator.userAgent : '';
-      const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-      const isMobileUA = mobileRegex.test(userAgent);
-      const isSmallScreen = window.innerWidth <= 768;
+    const handleFullscreenChange = () => {
+      const fullscreenEl =
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement;
 
-      setIsMobileDevice(isMobileUA || isSmallScreen);
+      setIsFullscreen(!!fullscreenEl);
     };
 
-    checkMobile();
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
 
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+    };
   }, []);
 
-  // SSR 服务器端渲染阶段默认渲染 DesktopVideoPlayer，避免水合不一致 (Hydration Mismatch)
-  if (isMobileDevice === null) {
-    return <DesktopVideoPlayer {...props} />;
-  }
+  // 绑定方向控制：若移动端屏幕旋转 API 失败，Hook 会自动给 containerRef 挂载 .is-mobile-landscape 样式类
+  useScreenOrientation(isFullscreen, containerRef.current);
 
-  // 根据设备类型渲染对应的播放器组件
-  return isMobileDevice ? (
-    <MobileVideoPlayer {...props} />
-  ) : (
-    <DesktopVideoPlayer {...props} />
+  return (
+    <div ref={containerRef} className="kvideo-container w-full h-full relative overflow-hidden">
+      <DesktopVideoPlayer {...props} />
+    </div>
   );
 }
