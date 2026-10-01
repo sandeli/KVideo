@@ -54,7 +54,7 @@ export const MovieCard = memo(function MovieCard({ movie, onMovieClick }: MovieC
               alt={movie.title}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-[var(--radius-2xl)]"
-              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+              sizes="(max-width: 640px) 33vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
               loading="eager"
               unoptimized
               referrerPolicy="no-referrer"
@@ -66,7 +66,7 @@ export const MovieCard = memo(function MovieCard({ movie, onMovieClick }: MovieC
               alt={movie.title}
               fill
               className="object-cover rounded-[var(--radius-2xl)]"
-              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+              sizes="(max-width: 640px) 33vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
               unoptimized
               onError={() => setFallbackError(true)}
             />
