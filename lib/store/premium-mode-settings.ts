@@ -37,6 +37,7 @@ export interface ModeSettings {
   danmakuOpacity: number;
   danmakuFontSize: number;
   danmakuDisplayArea: number;
+  danmakuSpeed: number;
 }
 
 function getDefaultModeSettings(): ModeSettings {
@@ -62,6 +63,7 @@ function getDefaultModeSettings(): ModeSettings {
     danmakuOpacity: 0.7,
     danmakuFontSize: 20,
     danmakuDisplayArea: 0.5,
+    danmakuSpeed: 1.0,
   };
 }
 
