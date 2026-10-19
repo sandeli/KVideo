@@ -197,7 +197,7 @@ export function usePlayerSettings(isPremium: boolean = false) {
     }, [updateModeSettings]);
 
     const setDanmakuSpeed = useCallback((value: number) => {
-        updateModeSettings({ danmakuSpeed: Math.max(0.5, Math.min(2.0, value)) });
+        updateModeSettings({ danmakuSpeed: Math.max(0.2, Math.min(1.5, value)) });
     }, [updateModeSettings]);
 
     return {
