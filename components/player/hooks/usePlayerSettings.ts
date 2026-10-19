@@ -29,6 +29,7 @@ interface PlayerSettingsSnapshot {
     danmakuOpacity: number;
     danmakuFontSize: number;
     danmakuDisplayArea: number;
+    danmakuSpeed: number;
 }
 
 function getPlayerSettingsSnapshot(isPremium: boolean, mediaProxyEnabled: boolean): PlayerSettingsSnapshot {
@@ -52,6 +53,7 @@ function getPlayerSettingsSnapshot(isPremium: boolean, mediaProxyEnabled: boolea
         danmakuOpacity: modeSettings.danmakuOpacity,
         danmakuFontSize: modeSettings.danmakuFontSize,
         danmakuDisplayArea: modeSettings.danmakuDisplayArea,
+        danmakuSpeed: modeSettings.danmakuSpeed ?? 1.0,
     };
 }
 
@@ -72,7 +74,8 @@ function playerSettingsEqual(a: PlayerSettingsSnapshot, b: PlayerSettingsSnapsho
         a.danmakuApiUrl === b.danmakuApiUrl &&
         a.danmakuOpacity === b.danmakuOpacity &&
         a.danmakuFontSize === b.danmakuFontSize &&
-        a.danmakuDisplayArea === b.danmakuDisplayArea
+        a.danmakuDisplayArea === b.danmakuDisplayArea &&
+        a.danmakuSpeed === b.danmakuSpeed
     );
 }
 
@@ -193,6 +196,10 @@ export function usePlayerSettings(isPremium: boolean = false) {
         updateModeSettings({ danmakuDisplayArea: value });
     }, [updateModeSettings]);
 
+    const setDanmakuSpeed = useCallback((value: number) => {
+        updateModeSettings({ danmakuSpeed: Math.max(0.5, Math.min(2.0, value)) });
+    }, [updateModeSettings]);
+
     return {
         ...settings,
         setAutoNextEpisode,
@@ -211,5 +218,6 @@ export function usePlayerSettings(isPremium: boolean = false) {
         setDanmakuOpacity,
         setDanmakuFontSize,
         setDanmakuDisplayArea,
+        setDanmakuSpeed,
     };
 }
