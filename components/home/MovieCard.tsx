@@ -92,8 +92,8 @@ export const MovieCard = memo(function MovieCard({ movie, onMovieClick }: MovieC
             </div>
           )}
         </div>
-        <div className="pt-3">
-          <h3 className="font-semibold text-sm text-center text-[var(--text-color)] line-clamp-2 group-hover:text-[var(--accent-color)] transition-colors">
+        <div className="pt-1.5 pb-1">
+          <h3 className="font-medium text-[13px] leading-tight text-center text-[var(--text-color)] line-clamp-1 group-hover:text-[var(--accent-color)] transition-colors">
             {movie.title}
           </h3>
         </div>
