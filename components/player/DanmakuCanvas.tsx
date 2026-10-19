@@ -158,7 +158,7 @@ export function DanmakuCanvas({ comments, currentTime, isPlaying }: DanmakuCanva
 
     metricsRef.current = next;
     return next;
-  }, [displayArea, fontSize]);
+  }, [displayArea, fontSize, scrollDuration]);
 
   // Handle canvas resize. Use layout dimensions rather than transformed bounding
   // dimensions, otherwise CSS-rotated iOS fullscreen can stretch the canvas.
@@ -322,7 +322,7 @@ export function DanmakuCanvas({ comments, currentTime, isPlaying }: DanmakuCanva
     }
 
     lastSpawnTimeRef.current = windowEnd;
-  }, [comments, displayArea, fontSize, syncCanvasSize]);
+  }, [comments, displayArea, fontSize, scrollDuration, syncCanvasSize]);
 
   // Animation loop
   useEffect(() => {
