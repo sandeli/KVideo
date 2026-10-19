@@ -3,7 +3,6 @@
 import { memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Icons } from '@/components/ui/Icon';
 import { LatencyBadge } from '@/components/ui/LatencyBadge';
@@ -60,16 +59,14 @@ export const VideoCard = memo<VideoCardProps>(({
                 data-focusable
                 className="group cursor-pointer hover:translate-y-[-2px] transition-transform duration-200 ease-out block h-full"
             >
-                <Card
-                    className="p-0 flex flex-col h-full bg-[var(--bg-color)]/50 backdrop-blur-none saturate-100 shadow-sm border-[var(--glass-border)] hover:shadow-lg transition-shadow"
-                    hover={false}
-                    blur={false}
+                <div
+                    className="flex flex-col h-full rounded-[var(--radius-2xl)] overflow-hidden bg-[var(--glass-bg)] shadow-sm"
                     style={{
                         backfaceVisibility: 'hidden',
                     }}
                 >
                     {/* Poster */}
-                    <div className="relative aspect-[2/3] bg-[color-mix(in_srgb,var(--glass-bg)_50%,transparent)] rounded-[var(--radius-2xl)] overflow-hidden">
+                    <div className="relative aspect-[2/3] bg-[color-mix(in_srgb,var(--glass-bg)_50%,transparent)] overflow-hidden">
                         {video.vod_pic ? (
                             <Image
                                 src={video.vod_pic}
@@ -182,13 +179,13 @@ export const VideoCard = memo<VideoCardProps>(({
                     </div>
 
                     {/* Info */}
-                    <div className="p-3 flex-1 flex flex-col">
+                    <div className="px-1 pt-1.5 pb-2 flex-1 flex flex-col">
                         {(() => {
                             const { cleanTitle } = parseVideoTitle(video.vod_name);
 
                             return (
                                 <>
-                                    <h4 className="font-semibold text-sm text-center text-[var(--text-color)] line-clamp-2 min-h-[2.5rem] mb-1">
+                                    <h4 className="font-medium text-[13px] leading-tight text-center text-[var(--text-color)] line-clamp-1 mb-1">
                                         {cleanTitle}
                                     </h4>
                                     <div className="flex items-center gap-1.5 flex-wrap justify-center">
@@ -206,7 +203,7 @@ export const VideoCard = memo<VideoCardProps>(({
                                         )}
                                     </div>
                                     {video.vod_lang && (
-                                        <p className="text-xs text-[var(--text-color-secondary)] mt-1">
+                                        <p className="text-xs text-center text-[var(--text-color-secondary)] mt-1">
                                             {video.vod_lang}
                                         </p>
                                     )}
@@ -214,7 +211,7 @@ export const VideoCard = memo<VideoCardProps>(({
                             );
                         })()}
                     </div>
-                </Card>
+                </div>
             </Link>
         </div>
     );
