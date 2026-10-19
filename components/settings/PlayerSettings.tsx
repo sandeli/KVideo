@@ -32,6 +32,8 @@ interface PlayerSettingsProps {
     onDanmakuFontSizeChange: (value: number) => void;
     danmakuDisplayArea: number;
     onDanmakuDisplayAreaChange: (value: number) => void;
+    danmakuSpeed?: number;
+    onDanmakuSpeedChange?: (value: number) => void;
     showDanmakuApi?: boolean;
 }
 
@@ -61,6 +63,8 @@ export function PlayerSettings({
     onDanmakuFontSizeChange,
     danmakuDisplayArea,
     onDanmakuDisplayAreaChange,
+    danmakuSpeed = 1.0,
+    onDanmakuSpeedChange,
     showDanmakuApi = true,
 }: PlayerSettingsProps) {
     const { mediaProxyEnabled, restrictionSummary } = useRuntimeFeatures();
@@ -339,6 +343,29 @@ export function PlayerSettings({
                                 ))}
                             </div>
                         </div>
+
+                        {/* Speed */}
+                        {onDanmakuSpeedChange && (
+                            <div>
+                                <label className="block text-sm font-medium text-[var(--text-color)] mb-2">
+                                    弹幕速度：{danmakuSpeed.toFixed(1)}x
+                                </label>
+                                <input
+                                    type="range"
+                                    min="0.5"
+                                    max="2"
+                                    step="0.1"
+                                    value={danmakuSpeed}
+                                    onChange={(e) => onDanmakuSpeedChange(parseFloat(e.target.value))}
+                                    className="w-full accent-[var(--accent-color)] h-2"
+                                />
+                                <div className="flex justify-between text-xs text-[var(--text-color-secondary)] mt-1">
+                                    <span>慢</span>
+                                    <span>正常</span>
+                                    <span>快</span>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
