@@ -348,7 +348,7 @@ export function useSettingsPage() {
     };
 
     const handleDanmakuSpeedChange = (value: number) => {
-        const clamped = Math.max(0.5, Math.min(2.0, value));
+        const clamped = Math.max(0.2, Math.min(1.5, value));
         setDanmakuSpeed(clamped);
         const currentSettings = settingsStore.getSettings();
         settingsStore.saveSettings({
