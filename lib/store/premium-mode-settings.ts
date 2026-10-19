@@ -102,6 +102,7 @@ export const premiumModeSettingsStore = {
         danmakuOpacity: typeof parsed.danmakuOpacity === 'number' ? parsed.danmakuOpacity : 0.7,
         danmakuFontSize: typeof parsed.danmakuFontSize === 'number' ? parsed.danmakuFontSize : 20,
         danmakuDisplayArea: typeof parsed.danmakuDisplayArea === 'number' ? parsed.danmakuDisplayArea : 0.5,
+        danmakuSpeed: typeof parsed.danmakuSpeed === 'number' ? parsed.danmakuSpeed : 1.0,
       };
     } catch {
       return getDefaultModeSettings();
