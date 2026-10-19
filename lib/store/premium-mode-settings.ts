@@ -164,6 +164,7 @@ export function getModeSettings(isPremium: boolean): ModeSettings {
     danmakuOpacity: s.danmakuOpacity,
     danmakuFontSize: s.danmakuFontSize,
     danmakuDisplayArea: s.danmakuDisplayArea,
+    danmakuSpeed: s.danmakuSpeed ?? 1.0,
   };
 }
 
