@@ -71,6 +71,8 @@ export default function SettingsPage() {
     handleDanmakuFontSizeChange,
     danmakuDisplayArea,
     handleDanmakuDisplayAreaChange,
+    danmakuSpeed,
+    handleDanmakuSpeedChange,
     blockedCategories,
     handleBlockedCategoriesChange,
   } = useSettingsPage();
@@ -105,6 +107,8 @@ export default function SettingsPage() {
             onDanmakuFontSizeChange={handleDanmakuFontSizeChange}
             danmakuDisplayArea={danmakuDisplayArea}
             onDanmakuDisplayAreaChange={handleDanmakuDisplayAreaChange}
+            danmakuSpeed={danmakuSpeed}
+            onDanmakuSpeedChange={handleDanmakuSpeedChange}
             showDanmakuApi={hasPermission('danmaku_api')}
           />
         </PermissionGate>
