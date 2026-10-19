@@ -62,6 +62,8 @@ export function DesktopMoreMenu({
         setDanmakuFontSize,
         danmakuDisplayArea,
         setDanmakuDisplayArea,
+        danmakuSpeed,
+        setDanmakuSpeed,
     } = usePlayerSettings(isPremium);
 
     const buttonRef = React.useRef<HTMLButtonElement>(null);
@@ -525,6 +527,23 @@ export function DesktopMoreMenu({
                                 </button>
                             ))}
                         </div>
+                    </div>
+                    {/* Speed Slider */}
+                    <div className={`${isRotated ? 'ml-4' : 'ml-6 sm:ml-7'}`}>
+                        <div className={`flex items-center justify-between mb-1 ${isRotated ? 'text-[9px]' : 'text-[10px] sm:text-xs'} text-[var(--text-color-secondary)]`}>
+                            <span>速度</span>
+                            <span>{danmakuSpeed.toFixed(1)}x</span>
+                        </div>
+                        <input
+                            type="range"
+                            min="0.5"
+                            max="2"
+                            step="0.1"
+                            value={danmakuSpeed}
+                            onChange={(e) => setDanmakuSpeed(parseFloat(e.target.value))}
+                            className={`w-full accent-[var(--accent-color)] ${isRotated ? 'h-1' : 'h-1.5'}`}
+                            onClick={(e) => e.stopPropagation()}
+                        />
                     </div>
                 </div>
             )}
