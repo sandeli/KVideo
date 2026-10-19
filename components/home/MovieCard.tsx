@@ -6,7 +6,6 @@
 import { memo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Card } from '@/components/ui/Card';
 import { Icons } from '@/components/ui/Icon';
 
 interface DoubanMovie {
@@ -46,14 +45,14 @@ export const MovieCard = memo(function MovieCard({ movie, onMovieClick }: MovieC
       onMouseEnter={(e) => (e.currentTarget.style.zIndex = '100')}
       onMouseLeave={(e) => (e.currentTarget.style.zIndex = '1')}
     >
-      <Card hover={false} className="p-0 h-full shadow-[0_2px_8px_var(--shadow-color)] hover:shadow-[0_8px_24px_var(--shadow-color)] transition-shadow duration-200 ease-out" blur={false}>
-        <div className="relative aspect-[2/3] bg-[var(--glass-bg)] rounded-[var(--radius-2xl)]">
+      <div className="h-full rounded-[var(--radius-2xl)] overflow-hidden bg-[var(--glass-bg)] shadow-[0_2px_8px_var(--shadow-color)]">
+        <div className="relative aspect-[2/3]">
           {!imageError ? (
             <Image
               src={movie.cover}
               alt={movie.title}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-[var(--radius-2xl)]"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
               sizes="(max-width: 640px) 33vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
               loading="eager"
               unoptimized
@@ -65,13 +64,13 @@ export const MovieCard = memo(function MovieCard({ movie, onMovieClick }: MovieC
               src="/placeholder-poster.svg"
               alt={movie.title}
               fill
-              className="object-cover rounded-[var(--radius-2xl)]"
+              className="object-cover"
               sizes="(max-width: 640px) 33vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
               unoptimized
               onError={() => setFallbackError(true)}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-[var(--glass-bg)] rounded-[var(--radius-2xl)]">
+            <div className="w-full h-full flex items-center justify-center bg-[var(--glass-bg)]">
               <p className="text-sm text-[var(--text-muted)]">暂无图片</p>
             </div>
           )}
@@ -92,12 +91,12 @@ export const MovieCard = memo(function MovieCard({ movie, onMovieClick }: MovieC
             </div>
           )}
         </div>
-        <div className="pt-1.5 pb-1">
+        <div className="px-1 pt-1.5 pb-2">
           <h3 className="font-medium text-[13px] leading-tight text-center text-[var(--text-color)] line-clamp-1 group-hover:text-[var(--accent-color)] transition-colors">
             {movie.title}
           </h3>
         </div>
-      </Card>
+      </div>
     </Link>
   );
 });
