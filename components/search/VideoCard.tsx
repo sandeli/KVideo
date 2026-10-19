@@ -24,6 +24,7 @@ interface VideoCardProps {
     latencies?: Record<string, number>;
     resolution?: ResolutionInfo | null;
     isProbing?: boolean;
+    rank?: number;
 }
 
 export const VideoCard = memo<VideoCardProps>(({
@@ -36,6 +37,7 @@ export const VideoCard = memo<VideoCardProps>(({
     latencies = {},
     resolution,
     isProbing = false,
+    rank,
 }) => {
     const displayLatency = latencies[video.source] ?? video.latency;
     const displayRemarks = htmlToText(video.vod_remarks);
@@ -105,8 +107,24 @@ export const VideoCard = memo<VideoCardProps>(({
                             <span className="text-xs text-[var(--text-color-secondary)] opacity-60 px-2 text-center line-clamp-2">{video.vod_name}</span>
                         </div>
 
-                        {/* Badge Container */}
-                        <div className="absolute top-2 left-2 right-2 z-10 flex items-center justify-between gap-1">
+                        {/* Rank Badge - Top Left (like ranking list style) */}
+                        {rank !== undefined && (
+                            <div className={`absolute top-2 left-2 z-10 w-8 h-8 flex items-center justify-center rounded-xl text-lg font-bold text-white shadow-md ${rank <= 3 ? 'bg-orange-500' : 'bg-black/60'}`}>
+                                {rank}
+                            </div>
+                        )}
+
+                        {/* Episode Badge - Bottom Left of poster */}
+                        {displayRemarks && (
+                            <div className="absolute bottom-2 left-2 z-10 bg-black/70 px-2.5 py-1 rounded-full">
+                                <span className="text-xs font-medium text-orange-400">
+                                    {displayRemarks}
+                                </span>
+                            </div>
+                        )}
+
+                        {/* Badge Container - offset when rank badge is present */}
+                        <div className={`absolute top-2 right-2 z-10 flex items-center justify-end gap-1 ${rank !== undefined ? 'left-12' : 'left-2'}`}>
                             <div className="flex items-center gap-1 min-w-0">
                                 {video.sourceName && (
                                     <Badge variant="primary" className="bg-[var(--accent-color)] flex-shrink-0 max-w-[100%] truncate">
@@ -170,18 +188,10 @@ export const VideoCard = memo<VideoCardProps>(({
 
                             return (
                                 <>
-                                    <h4 className="font-semibold text-sm text-[var(--text-color)] line-clamp-2 min-h-[2.5rem] mb-1">
+                                    <h4 className="font-semibold text-sm text-center text-[var(--text-color)] line-clamp-2 min-h-[2.5rem] mb-1">
                                         {cleanTitle}
                                     </h4>
-                                    {displayRemarks && (
-                                        <p
-                                            className="text-xs text-[var(--text-color-secondary)] mt-1 line-clamp-1"
-                                            title={displayRemarks}
-                                        >
-                                            {displayRemarks}
-                                        </p>
-                                    )}
-                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                    <div className="flex items-center gap-1.5 flex-wrap justify-center">
                                         {resolution ? (
                                             <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold text-white ${resolution.color}`}>
                                                 {resolution.label}
