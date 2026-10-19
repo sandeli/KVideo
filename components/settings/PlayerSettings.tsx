@@ -352,8 +352,8 @@ export function PlayerSettings({
                                 </label>
                                 <input
                                     type="range"
-                                    min="0.5"
-                                    max="2"
+                                    min="0.2"
+                                    max="1.5"
                                     step="0.1"
                                     value={danmakuSpeed}
                                     onChange={(e) => onDanmakuSpeedChange(parseFloat(e.target.value))}
