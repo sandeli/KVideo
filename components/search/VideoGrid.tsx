@@ -161,7 +161,7 @@ export const VideoGrid = memo(function VideoGrid({
 
       const cardId = `${video.vod_id}-${index}`;
 
-      return { video, videoUrl, cardId };
+      return { video, videoUrl, cardId, rank: index + 1 };
     });
   }, [videos, displayMode, isPremium]);
 
@@ -215,7 +215,7 @@ export const VideoGrid = memo(function VideoGrid({
           })
         ) : (
           // Normal mode
-          videoItems.slice(0, visibleCount).map(({ video, videoUrl, cardId }) => {
+          videoItems.slice(0, visibleCount).map(({ video, videoUrl, cardId, rank }) => {
             const isActive = activeCardId === cardId;
             return (
               <VideoCard
@@ -229,6 +229,7 @@ export const VideoGrid = memo(function VideoGrid({
                 latencies={latencies}
                 resolution={resolutions[`${video.source}:${video.vod_id}`]}
                 isProbing={isProbing && !resolutions[`${video.source}:${video.vod_id}`]}
+                rank={rank}
               />
             );
           })
