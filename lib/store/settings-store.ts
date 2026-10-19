@@ -68,7 +68,7 @@ export interface AppSettings {
   danmakuOpacity: number; // 0.1 - 1.0
   danmakuFontSize: number; // px
   danmakuDisplayArea: number; // 0.25 | 0.5 | 0.75 | 1.0
-  danmakuSpeed: number; // 0.5 - 2.0, multiplier (1.0 = normal)
+  danmakuSpeed: number; // 0.2 - 1.5, multiplier (1.0 = normal)
   locale: LocaleOption; // 'zh-CN' (Simplified) or 'zh-TW' (Traditional)
   blockedCategories: string[]; // Category keywords to hide from search results (e.g. '伦理')
 }
