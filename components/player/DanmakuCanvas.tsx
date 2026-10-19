@@ -27,16 +27,17 @@ interface ActiveDanmaku {
   lane: number;
 }
 
-const SCROLL_DURATION = 8; // seconds for a comment to cross the screen
+const BASE_SCROLL_DURATION = 8; // seconds for a comment to cross the screen at 1.0x speed
 const LANE_HEIGHT_FACTOR = 1.4; // multiplied by font size for lane height
 const TOP_BOTTOM_DURATION = 4; // seconds for top/bottom comments to stay visible
 const MAX_LANES = 20;
-const DEFAULT_DANMAKU_SETTINGS_SNAPSHOT = '0.7|20|0.5';
+const DEFAULT_DANMAKU_SETTINGS_SNAPSHOT = '0.7|20|0.5|1.0';
 
 interface DanmakuSettingsSnapshot {
   opacity: number;
   fontSize: number;
   displayArea: number;
+  speed: number;
 }
 
 function readCssPixelValue(value: string): number | undefined {
@@ -65,7 +66,7 @@ function readCanvasMetrics(canvas: HTMLCanvasElement): DanmakuCanvasMetrics | nu
 
 function getDanmakuSettingsSnapshot(): string {
   const settings = settingsStore.getSettings();
-  return `${settings.danmakuOpacity}|${settings.danmakuFontSize}|${settings.danmakuDisplayArea}`;
+  return `${settings.danmakuOpacity}|${settings.danmakuFontSize}|${settings.danmakuDisplayArea}|${settings.danmakuSpeed ?? 1.0}`;
 }
 
 function subscribeToDanmakuSettings(listener: () => void): () => void {
@@ -73,12 +74,13 @@ function subscribeToDanmakuSettings(listener: () => void): () => void {
 }
 
 function parseDanmakuSettingsSnapshot(snapshot: string): DanmakuSettingsSnapshot {
-  const [rawOpacity, rawFontSize, rawDisplayArea] = snapshot.split('|').map(Number);
+  const [rawOpacity, rawFontSize, rawDisplayArea, rawSpeed] = snapshot.split('|').map(Number);
 
   return {
     opacity: Number.isFinite(rawOpacity) ? rawOpacity : 0.7,
     fontSize: Number.isFinite(rawFontSize) ? rawFontSize : 20,
     displayArea: Number.isFinite(rawDisplayArea) ? rawDisplayArea : 0.5,
+    speed: Number.isFinite(rawSpeed) ? rawSpeed : 1.0,
   };
 }
 
@@ -97,10 +99,12 @@ export function DanmakuCanvas({ comments, currentTime, isPlaying }: DanmakuCanva
     getDanmakuSettingsSnapshot,
     () => DEFAULT_DANMAKU_SETTINGS_SNAPSHOT,
   );
-  const { opacity, fontSize, displayArea } = React.useMemo(
+  const { opacity, fontSize, displayArea, speed } = React.useMemo(
     () => parseDanmakuSettingsSnapshot(settingsSnapshot),
     [settingsSnapshot],
   );
+  // Effective scroll duration: higher speed = shorter duration = faster
+  const scrollDuration = BASE_SCROLL_DURATION / Math.max(0.1, speed);
 
   const syncCanvasSize = useCallback(() => {
     const canvas = canvasRef.current;
@@ -138,7 +142,7 @@ export function DanmakuCanvas({ comments, currentTime, isPlaying }: DanmakuCanva
             ...danmaku,
             x: scaleDanmakuCoordinate(danmaku.x, previous.width, next.width),
             y,
-            speed: (next.width + danmaku.width) / SCROLL_DURATION,
+            speed: (next.width + danmaku.width) / scrollDuration,
           };
         }
 
@@ -263,7 +267,7 @@ export function DanmakuCanvas({ comments, currentTime, isPlaying }: DanmakuCanva
 
       if (type === 'scroll') {
         // Find available lane
-        const speed = (canvasWidth + textWidth) / SCROLL_DURATION;
+        const speed = (canvasWidth + textWidth) / scrollDuration;
         let bestLane = -1;
         for (let lane = 0; lane < MAX_LANES; lane++) {
           const yPos = lane * laneHeight + fontSize;
