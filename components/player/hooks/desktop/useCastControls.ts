@@ -138,6 +138,15 @@ export function useCastControls({
                 }
             };
             window.__onGCastApiAvailable = onGCastApiAvailable;
+
+            // Cast SDK 改为按需加载（此前由根布局全局注入，每个页面都请求一次）：
+            // 只有真正进入播放器时才插入脚本，加载完成后 SDK 会回调 __onGCastApiAvailable
+            if (!document.querySelector('script[src*="cast_sender.js"]')) {
+                const script = document.createElement('script');
+                script.src = 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1';
+                script.async = true;
+                document.head.appendChild(script);
+            }
         }
 
         return () => {

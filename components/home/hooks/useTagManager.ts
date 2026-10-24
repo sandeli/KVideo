@@ -1,6 +1,19 @@
 import { useState, useEffect } from 'react';
-import { DragEndEvent } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
+import type { DragEndEvent } from '@dnd-kit/core';
+
+/**
+ * 与 @dnd-kit/sortable 的 arrayMove 等价的本地实现（返回新数组、支持负索引）。
+ * 只为这一个小工具函数把整个拖拽库拉进首屏不划算，故本地实现。
+ */
+function arrayMove<T>(array: T[], from: number, to: number): T[] {
+    const result = array.slice();
+    const startIndex = from < 0 ? result.length + from : from;
+    if (startIndex < 0 || startIndex >= result.length) return result;
+    const [item] = result.splice(startIndex, 1);
+    const endIndex = to < 0 ? result.length + to : to;
+    result.splice(endIndex, 0, item);
+    return result;
+}
 import type { Tag } from '../SortableTag';
 
 const DEFAULT_TAG = { id: 'popular', label: '热门', value: '热门' };

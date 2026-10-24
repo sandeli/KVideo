@@ -26,8 +26,9 @@ test('popular tag management mode stays out of discovery grids', () => {
 });
 
 test('tag management list uses wrapping chip layout instead of a horizontal search filter row', () => {
+  // 拖拽实现已拆到 SortableTagList.tsx 并改为懒加载（TagList.tsx 只剩普通标签行），断言随实现走
   const source = readFileSync(
-    join(projectRoot, 'components/home/TagList.tsx'),
+    join(projectRoot, 'components/home/SortableTagList.tsx'),
     'utf8',
   );
 

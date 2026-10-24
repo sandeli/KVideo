@@ -1,8 +1,8 @@
 import { Icons } from '@/components/ui/Icon';
-import { DragEndEvent } from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
 import { TagInput } from './TagInput';
 import { TagList } from './TagList';
-import { Tag } from './SortableTag';
+import type { Tag } from './SortableTag';
 
 interface RecommendTagConfig {
   label: string;
